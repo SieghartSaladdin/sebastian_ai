@@ -1,0 +1,7 @@
+rich
+pyfiglet
+langchain-ollama
+langchain-core
+langchain-community
+sqlalchemy
+psutil
