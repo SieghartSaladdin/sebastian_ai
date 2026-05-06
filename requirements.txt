@@ -5,3 +5,5 @@ langchain-core
 langchain-community
 sqlalchemy
 psutil
+prompt_toolkit
+pygments
