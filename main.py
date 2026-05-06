@@ -206,10 +206,22 @@ async def main():
             # ── Phase 1: Tool execution (spinner per tool) ──────────
             stream = astream_response(llm, history.messages, on_write_confirm=on_write_confirm)
 
+            # Show "thinking" spinner immediately so user knows it's working
+            thinking_status = console.status(
+                "[sebastian]Sebastian is thinking...[/sebastian]",
+                spinner="dots"
+            )
+            thinking_status.start()
+
             current_status = None
             first_text_chunk = None
 
             async for event in stream:
+                # Stop the initial thinking spinner on the very first event
+                if thinking_status:
+                    thinking_status.stop()
+                    thinking_status = None
+
                 if isinstance(event, dict):
                     etype = event.get("type")
 
@@ -250,6 +262,8 @@ async def main():
                     first_text_chunk = event
                     break
 
+            if thinking_status:
+                thinking_status.stop()
             if current_status:
                 current_status.stop()
 
